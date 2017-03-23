@@ -1,26 +1,113 @@
-var __appendShareLink__ = function() {
-    var __5pcq = window.document.getElementsByClassName('_5pcq');
-    var __hype = window.document.querySelectorAll('[id^=hyperfeed_story_id_]'),
-        __t;
-    for (__t = 0; __t < __hype.length; __t++) {
-        var __sp = document.createElement('span'),
-            __te = document.createTextNode('Quick Share'),
-            __pl = __hype[__t].querySelectorAll('div._42nr');
+/**
+ * @author: The Phuc
+ * @package: inject share link to every facebook post
+ * @since: 2017-03-23
+ */
 
-        __sp.className = "fb_quick_share_ext";
-        __sp.style.backgroundImage = "url('"+chrome.extension.getURL('images/share.png');+"')";
-        __sp.style.backgroundRepeat = "no-repeat";
-        __sp.appendChild(__te);
-        if(__pl.length > 0)
-            if(__pl[0].querySelectorAll('span.fb_quick_share_ext').length === 0)
-                __pl[0].appendChild(__sp);
+var __tepl = window['createNav'],
+    __tequ = __tepl !== undefined ? __tepl.querySelectorAll("span.sectionDragHandle") : [],
+    __tefl = 'TẠO',
+    __tevi = 'Gửi cho bạn bè',
+    __teen = 'Quick Share',
+    __clas = 'fb_quick_share_ext',
+    __qsid = 'id_fb_quick_share_ext',
+    __atst = 'quick-share-link',
+    __doma = 'https://www.facebook.com/',
+    __icon = 'images/share.png',
+    __tedi;
+
+var __getProfileID__ = function() {
+    var __find = window.document.querySelector('[id^=profile_pic_header_]');
+    if(__find === null) return '';
+    __find = __find.id;
+    __find = __find.split('_');
+    return __find.pop();
+};
+
+var __loadAPI__ = function() {
+    var __load = function() {
+        var __s = window.document.createElement("script");
+        __s.type = "text/javascript";
+        __s.src = chrome.extension.getURL('js/api.js');
+        __s.id = __qsid;
+        window.document.head.appendChild(__s);
+    };
+    if(window.document.getElementById(__qsid) === null)
+        __load();
+    if(window.document.getElementById(__qsid) !== null) {
+        window.document.getElementById(__qsid).remove();
+        __load();
     }
 };
 
-__appendShareLink__();
-document.addEventListener('DOMContentLoaded', function() {
-    __appendShareLink__();
-});
+var __injectShareLinkToListPost__ = function() {
+    if(__tequ === undefined || __tequ.length <= 0) return;
+    __tedi = __tequ[0].textContent === __tefl ? __tevi : __teen;
+
+    var __hype = window.document.querySelectorAll('[id^=hyperfeed_story_id_]'),
+        __numb = 0;
+
+    if(__hype === undefined) return;
+
+    for (; __numb < __hype.length; ++__numb) {
+        var __span = window.document.createElement('span'),
+            __text = window.document.createTextNode(__tedi),
+            __link = __hype[__numb].querySelector('input[name="ft_ent_identifier"]'),
+            __plac = __hype[__numb].querySelectorAll('div._42nr'),
+            __attr = window.document.createAttribute(__atst);
+
+        if(__link === null) return;
+
+        __attr.value = __doma + __link.value;
+        __span.setAttributeNode(__attr);
+        __span.className = __clas;
+        __span.style.backgroundImage = "url('"+ chrome.extension.getURL(__icon) +"')";
+        __span.style.backgroundRepeat = "no-repeat";
+        __span.appendChild(__text);
+        __span.addEventListener('click', function() {
+            var __lipo = this.getAttribute(__atst);
+            __loadAPI__();
+        });
+        if(__plac.length > 0)
+            if(__plac[0].querySelectorAll('span.'+__clas).length === 0)
+                __plac[0].appendChild(__span);
+    }
+};
+
+var __injectShareLinkToPost__ = function() {
+    if(__tequ === undefined || __tequ.length <= 0) return;
+    __tedi = __tequ[0].textContent === __tefl ? __tevi : __teen;
+
+    var __hype = window.document.querySelector('[id^=group_mall_]');
+    if(__hype === null) return;
+
+    var __span = window.document.createElement('span'),
+        __text = window.document.createTextNode(__tedi),
+        __attr = window.document.createAttribute(__atst),
+        __link = __hype.querySelector('input[name="ft_ent_identifier"]'),
+        __plac = __hype.querySelectorAll('div._42nr');
+
+    __attr.value = __doma + __link.value;
+    __span.setAttributeNode(__attr);
+    __span.className = __clas;
+    __span.style.backgroundImage = "url('"+ chrome.extension.getURL(__icon) +"')";
+    __span.style.backgroundRepeat = "no-repeat";
+    __span.appendChild(__text);
+    __span.addEventListener('click', function() {
+        var __lipo = this.getAttribute(__atst);
+        __loadAPI__();
+    });
+
+    if(__plac.length > 0)
+        if(__plac[0].querySelectorAll('span.'+__clas).length === 0)
+            __plac[0].appendChild(__span);
+};
+
+(function(){
+    __loadAPI__();
+    __injectShareLinkToPost__();
+    __injectShareLinkToListPost__();
+})();
 window.onscroll = function(ev) {
-    __appendShareLink__();
+    __injectShareLinkToListPost__();
 };
