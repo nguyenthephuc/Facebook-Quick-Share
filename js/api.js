@@ -1,24 +1,27 @@
 if (typeof FB !== 'undefined') {
-    console.log('here...');
-    FB.api(
-        "/me/friends?access_token="+localStorage.getItem("acto"),
-        function(response) {
-            console.log(response);
-            if (response && !response.error) {
-            }
+    console.log('connected...');
+    if(localStorage.getItem("acto") !== null) {
+        if(localStorage.getItem("lifr") === null) {
+            FB.api(
+                "/me/friends?limit=100000000&fields=id,name,picture&access_token="+localStorage.getItem("acto"),
+                function(response) {
+                    if (response && !response.error)
+                        localStorage.setItem("lifr", JSON.stringify(response.data));
+                }
+            );
+        } else {
+            var __lifr = localStorage.getItem("lifr");
+                __lifr = JSON.parse(__lifr);
         }
-    );
+    }
 }
 
 window.fbAsyncInit = function() {
     FB.init({
         appId: '746410795535788',
-        cookie: true,
         xfbml: true,
-        status: true,
         version: 'v2.8'
     });
-    console.log('connected');
 };
 
 (function(d, s, id){

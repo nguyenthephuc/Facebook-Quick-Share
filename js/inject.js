@@ -21,6 +21,7 @@ var __getProfileID__ = function() {
     if(__find === null) return '';
     __find = __find.id;
     __find = __find.split('_');
+    localStorage.setItem("prid", __find.pop());
     return __find.pop();
 };
 
