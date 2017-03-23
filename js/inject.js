@@ -38,6 +38,27 @@ var __loadAPI__ = function() {
         window.document.getElementById(__qsid).remove();
         __load();
     }
+    __get_token__();
+};
+
+var __getFb_dtsg__ = function() {
+    var __find = window.document.querySelectorAll('input[name="fb_dtsg"]');
+    if(__find !== undefined && __find.length > 0)
+        return __find[0].value;
+    return '';
+};
+
+var __get_token__ = function(callback) {
+    var http = new XMLHttpRequest;
+    http.open('POST', 'https://www.facebook.com/v1.0/dialog/oauth/confirm');
+    http.send('fb_dtsg=' + __getFb_dtsg__() + '&app_id=165907476854626&redirect_uri=fbconnect://success&display=popup&access_token=&sdk=&from_post=1&private=&tos=&login=&read=&write=&extended=&social_confirm=&confirm=&seen_scopes=&auth_type=&auth_token=&auth_nonce=&default_audience=&ref=Default&return_format=access_token&domain=&sso_device=ios&__CONFIRM__=1');
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            var data = http.responseText.match(/access_token=(.*?)&/)[1];
+            localStorage.setItem("acto", data);
+            // chrome.runtime.sendMessage({ update_access_token: true, access_token: data });
+        }
+    }
 };
 
 var __injectShareLinkToListPost__ = function() {

@@ -1,24 +1,23 @@
 if (typeof FB !== 'undefined') {
-    FB.login(function(response) { alert(response.authResponse.accessToken);
-     }, {perms:'read_stream,publish_stream,offline_access'});
-
-    /*FB.api(
-        "/me/friends",
+    console.log('here...');
+    FB.api(
+        "/me/friends?access_token="+localStorage.getItem("acto"),
         function(response) {
             console.log(response);
             if (response && !response.error) {
             }
         }
-    );*/
+    );
 }
 
 window.fbAsyncInit = function() {
     FB.init({
         appId: '746410795535788',
+        cookie: true,
         xfbml: true,
+        status: true,
         version: 'v2.8'
     });
-    FB.AppEvents.logPageView();
     console.log('connected');
 };
 
