@@ -9,12 +9,30 @@ var __tepl = window['createNav'],
     __tefl = 'TẠO',
     __tevi = 'Gửi cho bạn bè',
     __teen = 'Quick Share',
+    __plvi = 'Tìm kiếm bạn bè',
+    __plen = 'Search your friends',
     __clas = 'fb_quick_share_ext',
     __qsid = 'id_fb_quick_share_ext',
     __atst = 'quick-share-link',
     __doma = 'https://www.facebook.com/',
     __icon = 'images/share.png',
+    __spid = 'fb_quick_share_ext-spotlight_wrapper',
+    __spin = 'fb_quick_share_ext-spotlight',
     __tedi;
+
+var __injectFormSearch = function() {
+    if(__tequ === undefined || __tequ.length <= 0) return;
+    __tedi = __tequ[0].textContent === __tefl ? __plvi : __plen;
+
+    var __div = window.document.createElement("div");
+        __div.id = __spid;
+    var __inpu = window.document.createElement('input');
+        __inpu.id = __spin;
+        __inpu.type = "text";
+        __inpu.placeholder = __tedi;
+    __div.appendChild(__inpu);
+    window.document.body.appendChild(__div);
+};
 
 var __getProfileID__ = function() {
     var __find = window.document.querySelector('[id^=profile_pic_header_]');
@@ -33,6 +51,8 @@ var __loadAPI__ = function() {
         __s.id = __qsid;
         window.document.head.appendChild(__s);
     };
+    if(window.document.getElementById(__qsid) === null)
+        __injectFormSearch();
     if(window.document.getElementById(__qsid) === null)
         __load();
     if(window.document.getElementById(__qsid) !== null) {
