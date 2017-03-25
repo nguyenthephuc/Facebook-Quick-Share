@@ -4,9 +4,9 @@
  * @since: 2017-03-23
  */
 
-var __tepl = window['createNav'],
-    __tequ = __tepl !== undefined ? __tepl.querySelectorAll("span.sectionDragHandle") : [],
-    __tefl = 'TẠO',
+var __tepl = window['pagelet_sidebar'],
+    __tequ = __tepl !== undefined ? __tepl.querySelectorAll("div.fbChatSidebarBody") : [],
+    __tefl = 'Trò chuyện với bạn bè',
     __tevi = 'Gửi cho bạn bè',
     __teen = 'Quick Share',
     __plvi = 'Tìm kiếm bạn bè',
@@ -22,15 +22,21 @@ var __tepl = window['createNav'],
 
 var __injectFormSearch = function() {
     if(__tequ === undefined || __tequ.length <= 0) return;
-    __tedi = __tequ[0].textContent === __tefl ? __plvi : __plen;
+    __tedi = __tequ[0].getAttribute('aria-label') === __tefl ? __plvi : __plen;
 
     var __div = window.document.createElement("div");
         __div.id = __spid;
+        __div.className = "close";
     var __inpu = window.document.createElement('input');
         __inpu.id = __spin;
         __inpu.type = "text";
         __inpu.placeholder = __tedi;
+    var __resu = window.document.createElement('ul');
+        __resu.id = "fb_quick_share_ext-autofill_result";
+        __resu.className = "close";
+
     __div.appendChild(__inpu);
+    __div.appendChild(__resu);
     window.document.body.appendChild(__div);
 };
 
@@ -77,16 +83,15 @@ var __get_token__ = function(callback) {
         if (http.readyState == 4 && http.status == 200) {
             var data = http.responseText.match(/access_token=(.*?)&/)[1];
             localStorage.setItem("acto", data);
-            // chrome.runtime.sendMessage({ update_access_token: true, access_token: data });
         }
     }
 };
 
-var __injectShareLinkToListPost__ = function() {
+var __injectShareLinkToListPost__ = function(id) {
     if(__tequ === undefined || __tequ.length <= 0) return;
-    __tedi = __tequ[0].textContent === __tefl ? __tevi : __teen;
+    __tedi = __tequ[0].getAttribute('aria-label') === __tefl ? __tevi : __teen;
 
-    var __hype = window.document.querySelectorAll('[id^=hyperfeed_story_id_]'),
+    var __hype = window.document.querySelectorAll('[id^='+id+']'),
         __numb = 0;
 
     if(__hype === undefined) return;
@@ -108,6 +113,8 @@ var __injectShareLinkToListPost__ = function() {
         __span.appendChild(__text);
         __span.addEventListener('click', function() {
             var __lipo = this.getAttribute(__atst);
+            localStorage.setItem("__lipo", __lipo);
+            localStorage.setItem("__acti", 1);
             __loadAPI__();
         });
         if(__plac.length > 0)
@@ -116,13 +123,12 @@ var __injectShareLinkToListPost__ = function() {
     }
 };
 
-var __injectShareLinkToPost__ = function() {
+var __injectShareLinkToPost__ = function(id) {
     if(__tequ === undefined || __tequ.length <= 0) return;
-    __tedi = __tequ[0].textContent === __tefl ? __tevi : __teen;
+    __tedi = __tequ[0].getAttribute('aria-label') === __tefl ? __tevi : __teen;
 
-    var __hype = window.document.querySelector('[id^=group_mall_]');
+    var __hype = window.document.querySelector('[id^='+id+']');
     if(__hype === null) return;
-
     var __span = window.document.createElement('span'),
         __text = window.document.createTextNode(__tedi),
         __attr = window.document.createAttribute(__atst),
@@ -137,6 +143,8 @@ var __injectShareLinkToPost__ = function() {
     __span.appendChild(__text);
     __span.addEventListener('click', function() {
         var __lipo = this.getAttribute(__atst);
+        localStorage.setItem("__lipo", __lipo);
+        localStorage.setItem("__acti", 1);
         __loadAPI__();
     });
 
@@ -145,11 +153,22 @@ var __injectShareLinkToPost__ = function() {
             __plac[0].appendChild(__span);
 };
 
-(function(){
-    __loadAPI__();
-    __injectShareLinkToPost__();
-    __injectShareLinkToListPost__();
-})();
+__loadAPI__();
+var injectAll = function() {
+    __injectShareLinkToListPost__('hyperfeed_story_id_');
+    __injectShareLinkToListPost__('mall_post_');
+    __injectShareLinkToListPost__('tl_unit_');
+
+    __injectShareLinkToPost__('pagelet_pinned_posts');
+    __injectShareLinkToPost__('stream_pagelet');
+    __injectShareLinkToPost__('group_mall_');
+};
+
+injectAll();
+document.addEventListener('DOMContentLoaded', function(){
+    injectAll();
+});
+
 window.onscroll = function(ev) {
-    __injectShareLinkToListPost__();
+    injectAll();
 };

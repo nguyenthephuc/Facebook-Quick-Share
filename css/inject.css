@@ -19,7 +19,6 @@
 /* Track */
 #fb_quick_share_ext-spotlight_wrapper *::-webkit-scrollbar-track {
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     width: 0;
     /*display:none;*/
@@ -28,7 +27,6 @@
 
 /* Handle */
 #fb_quick_share_ext-spotlight_wrapper *::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     background: #d9d9d9;
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
@@ -38,37 +36,53 @@
     /*background: rgba(255,0,0,0.4);*/
 }
 
+
 #fb_quick_share_ext-spotlight_wrapper {
-    position: absolute;
-    top: 15%;
+    position: fixed;
+    top: 25%;
     left: 50%;
     right: 50%;
     display: block;
     width: 628px;
     margin: auto;
+    z-index: 90000000;
 
-    -webkit-transform: translateX(-50%); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
-    -ms-transform: translateX(-50%); /* IE 9 */
-    transform: translateX(-50%); /* IE 10, Fx 16+, Op 12.1+ */
+    -webkit-transform: translate(-50%, -25%); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */ /* IE 9 */
+    transform: translate(-50%, -25%); /* IE 10, Fx 16+, Op 12.1+ */
 
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+}
+
+#fb_quick_share_ext-spotlight_wrapper.close{
+    opacity: 0;
+    -webkit-transform: translate(-50%, -25%) scale(1.2);
+            transform: translate(-50%, -25%) scale(1.2);
+    visibility: visible;
+    pointer-events: none;
 }
 
 #fb_quick_share_ext-spotlight_wrapper >*{
     width: 100%;
 }
+
 #fb_quick_share_ext-spotlight {
+    position: relative;
     display: block;
     height: 56px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+
     -moz-appearance: none;
     -webkit-appearance: none;
-    -moz-box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: none;
     outline: none;
     font-size: 1.6rem;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -89,54 +103,55 @@
 
     /*reset style*/
     width: 100%;
+    margin: 0 auto;
     list-style: none;
     padding: 0;
-    margin: 0;
+    /*margin: 0;*/
 
     /*style*/
-    background: white;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 0 0 5px 5px;
+
     -moz-appearance: none;
     -webkit-appearance: none;
-    -moz-box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 25px 60px 10px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-
+    /*border: 1px solid rgba(0, 0, 0, 0.2);*/
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
-    padding: 0;
     max-height: 50vh;
+    opacity: 1;
     overflow-y: auto;
-
-    transition: all 0.5s;
+    overflow-x: hidden;
+    -webkit-transition: max-height 0.3s, opacity 0.3s;
+    transition: max-height 0.3s, opacity 0.3s;
 
 }
 #fb_quick_share_ext-autofill_result.close{
     max-height: 0px;
     opacity: 0;
 }
+
 #fb_quick_share_ext-autofill_result li + li{
     border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 #fb_quick_share_ext-autofill_result li{
-    padding: 5px 10px;
+    padding: 10px 10px;
     box-sizing: border-box;
+    -webkit-transition: background-color 0.2s, -webkit-transform 0.2s;
+    transition: background-color 0.2s, -webkit-transform 0.2s;
     transition: transform 0.2s, background-color 0.2s;
+    transition: transform 0.2s, background-color 0.2s, -webkit-transform 0.2s;
+    background: white;
     color: #3a3a3a;
     cursor: pointer
 }
 
 #fb_quick_share_ext-autofill_result li:hover{
-    /*transform: translateY(-4px);*/
+    -webkit-transform: scale(1.01);
+            transform: scale(1.01);
     background-color: #f8f5f4;
 }
 #fb_quick_share_ext-autofill_result li >img{
     margin-right: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -169,8 +184,6 @@
     width: 100%;
     text-align: center;
     padding: 0 40%;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: 1.4rem;
