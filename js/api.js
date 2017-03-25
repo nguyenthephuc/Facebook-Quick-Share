@@ -57,7 +57,7 @@ if(localStorage.getItem('__acti') !== null && localStorage.getItem('__acti') == 
 }
 
 var __sendMessage__ = function(__usid) {
-    //
+    __closeSpotlight__();
 };
 
 function ChangeToSlug(title) {
