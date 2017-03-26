@@ -1,3 +1,9 @@
+/**
+ * @author: The Phuc
+ * @package: inject share link to every facebook post
+ * @since: 2017-03-23
+ */
+
 if(localStorage.getItem('__acti') !== null && localStorage.getItem('__acti') == 1) {
     localStorage.removeItem('__acti');
     if (typeof FB !== 'undefined') {
@@ -37,6 +43,8 @@ if(localStorage.getItem('__acti') !== null && localStorage.getItem('__acti') == 
                         window.document.getElementById('fb_quick_share_ext-autofill_result').className = "open";
                         var __li = window.document.createElement('li');
                             __li.setAttribute('user-id', __lifr[i].id);
+                            __li.setAttribute('full-name', __lifr[i].name);
+                            __li.setAttribute('avatar', __lifr[i].picture.data.url);
                         var __im = window.document.createElement('img');
                             __im.src = __lifr[i].picture.data.url;
                             __im.alt = __lifr[i].name;
@@ -46,7 +54,9 @@ if(localStorage.getItem('__acti') !== null && localStorage.getItem('__acti') == 
                         __li.appendChild(__sp);
                         __li.onclick = function() {
                             var __usid = this.getAttribute('user-id');
-                            __sendMessage__(__usid);
+                            var __funa = this.getAttribute('full-name');
+                            var __avat = this.getAttribute('avatar');
+                            __sendMessage__(__usid, __funa, __avat);
                         };
                         window.document.getElementById('fb_quick_share_ext-autofill_result').appendChild(__li);
                     }
@@ -56,7 +66,21 @@ if(localStorage.getItem('__acti') !== null && localStorage.getItem('__acti') == 
     }
 }
 
-var __sendMessage__ = function(__usid) {
+var __sendMessage__ = function(__usid, __funa, __avat) {
+    var __pane = window['pagelet_sidebar'];
+    if(!__pane) return;
+
+    var __inpu = __pane.querySelector('input[class="_58al"]');
+    if(!__inpu) return;
+
+    __inpu.focus();
+    setTimeout(function(){
+        var evt = document.createEvent("KeyboardEvent");
+        evt.initEvent("keypress", false, true);
+        __inpu.dispatchEvent(evt);
+        __inpu.value = __funa;
+    }, 500);
+
     __closeSpotlight__();
 };
 
@@ -79,7 +103,6 @@ var __removeUL__ = function() {
     var elem = window.document.getElementById('fb_quick_share_ext-autofill_result');
     elem.innerHTML = "";
 };
-
 
 var __openSpotlight__ = function() {
     window.document.getElementById('fb_quick_share_ext-spotlight_wrapper').className = "open";

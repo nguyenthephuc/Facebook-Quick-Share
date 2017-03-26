@@ -1,3 +1,9 @@
+/**
+ * @author: The Phuc
+ * @package: inject share link to every facebook post
+ * @since: 2017-03-23
+ */
+
 chrome.tabs.onUpdated.addListener(function(tabId, info) {
     chrome.tabs.get(tabId, function(tab) {
         if (tab.url && tab.url.match('http.\:\/\/[\w]+\.facebook\.com')) {

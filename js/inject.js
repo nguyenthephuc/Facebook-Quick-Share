@@ -55,7 +55,7 @@ var __loadAPI__ = function() {
         __s.type = "text/javascript";
         __s.src = chrome.extension.getURL('js/api.js');
         __s.id = __qsid;
-        window.document.head.appendChild(__s);
+        window.document.body.appendChild(__s);
     };
     if(window.document.getElementById(__qsid) === null)
         __injectFormSearch();
