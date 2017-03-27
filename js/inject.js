@@ -134,7 +134,7 @@ var __injectShareLinkToPost__ = function(id) {
         __attr = window.document.createAttribute(__atst),
         __link = __hype.querySelector('input[name="ft_ent_identifier"]'),
         __plac = __hype.querySelectorAll('div._42nr');
-
+    if(!__link) return;
     __attr.value = __doma + __link.value;
     __span.setAttributeNode(__attr);
     __span.className = __clas;
